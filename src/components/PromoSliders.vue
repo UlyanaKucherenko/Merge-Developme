@@ -1,6 +1,7 @@
 <template>
     <div class="promo-sliders">
-         <a-carousel  arrows dots-class="slick-dots slick-thumb"
+         <a-carousel   class="promo-sliders__slider"
+         :autoplay="true"
          :autoplaySpeed="5000"
          :speed="1000">
             <div class="promo-sliders__slide" v-for="{image, title, text} in slides" :key="title">
@@ -86,7 +87,7 @@ export default {
                min-height: 560px;
             }
 
-        & .ant-carousel  {
+        &__slider  {
             text-align: center;
             overflow: hidden;
             max-width: 512px;
@@ -94,15 +95,19 @@ export default {
 
             }   
 
-        & .ant-carousel .slick-dots {
+        &__slider .slick-dots {
             height: 8px;
+            @include media(768px) {
+               
+                height: 12px;
+            }
         }
 
-        & .ant-carousel .slick-dots-bottom {
+        &__slider .slick-dots-bottom {
             bottom: 0px;
         }
 
-        & .ant-carousel .slick-dots li  {
+        &__slider .slick-dots li  {
             margin-right: 45px;
             &:last-child {
                 margin-right: 0;
@@ -113,6 +118,10 @@ export default {
             height: 8px;
             background: $white;
             border-radius: 50%;
+            @include media(768px) {
+                width: 12px;
+                height: 12px;
+            }
         }
 
         &__slide-wrap-shadow {

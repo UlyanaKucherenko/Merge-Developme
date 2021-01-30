@@ -10,39 +10,39 @@
             </p>
 
             <!--Form-->
-            <a-form class="sing-form__form-sigin"
-                :form="form"
-                @submit="handleSubmit" >
-                <a-form-item 
-                label="Email">
-                    <a-input
-                        v-decorator="[
-                        'email',
-                        { rules: [{ required: true, message: 'Invalid email' }] },
-                        ]"
-                        type="email" >
-                    </a-input>
-                </a-form-item>
-                <a-form-item 
-                label="Password">
-                    <a-input
-                        v-decorator="[
-                        'password',
-                        { rules: [{ required: true, message: 'Invalid format too short' }] },
-                        ]"
-                        type="password">
-                    </a-input>
+            <a-form-model class="sing-form__form-singin"
+                ref="ruleForm"
+                :model="formInput"
+                :rules="rules" >
+               <a-form-model-item ref="email" label="Email" prop="email">
+                <a-input
+                    type="email"
+                    v-model="formInput.email"
+                    @blur="
+                    () => {
+                        $refs.email.onFieldBlur();
+                    }"/>
+                </a-form-model-item>
+              <a-form-model-item ref="password" label="Password" prop="password">
+                <a-input
+                    v-model="formInput.password"
+                    @blur="
+                    () => {
+                        $refs.password.onFieldBlur();
+                    }"/>
                     <a class="sing-form__form-forgot" href="#" target="_blank" >
                         Forgot your password?
                     </a>
-                </a-form-item>
+                </a-form-model-item>
                 <a-form-item>
                 
-                <a-button type="primary" html-type="submit" class="sing-form__form-button">
+                <a-button type="primary" html-type="submit" class="sing-form__form-button" 
+                :disabled="formInput.email === '' || formInput.password === ''" 
+                @click="onSubmit">
                     Sing in
                 </a-button>
                 </a-form-item>
-            </a-form>   
+            </a-form-model>   
         </div>
 
          <!--Info links-->
@@ -71,18 +71,37 @@ export default {
                 "Privacy",
                 "Terms"
             ],
+
+            formInput: {
+                email: '',
+                password: '',
+            },
+            rules: {
+                email: [
+                   { required: true, message: 'Invalid email', trigger: 'blur' },
+                ],
+                 password: [
+                   { required: true, message: 'Invalid format too short', trigger: 'blur' },
+                    { min: 4, max: 50, message: 'Invalid format too short', trigger: 'blur' },
+                ],
+
+            },
+        
         }
     },
 
-    beforeCreate() {
-    this.form = this.$form.createForm(this, { name: 'singIn' });
-  },
-
   methods: {
 
-    handleSubmit(e) {
-      e.preventDefault();
-        console.log('Received values of form: ');
+    onSubmit() {
+      this.$refs.ruleForm.validate(valid => {
+        if (valid) {
+          alert('Form sent!');
+          this.$refs.ruleForm.resetFields();
+        } else {
+          console.log('error submit!!');
+          return false;
+        }
+      });
     },
 
   },
@@ -95,22 +114,24 @@ export default {
         max-height: 800px;
         height: 100%;
         padding: 30px 70px 20px 60px;
-        @include flex(flex-start, flex-start, column);
+        @include flex(space-between, flex-start, column);
         position: relative;
 
         @include media($screen: $screen-desktop) {
             padding: 30px 30px 20px 30px;
         }
-         @include media(768px) {
+        
+        @include media(768px) {
             width: 100%;
-          @include flex(center, center, column);
-          margin: 0 auto;
-          padding: 10px 20px;
+            @include flex(center, center, column);
+            margin: 0 auto;
+            padding: 10px 20px;
         }
 
         &__logo {
             text-align: left;
             margin-bottom: 50px;
+            flex-grow: 0.2;
              @include media(768px) {
                 margin-bottom: 20px;
             }
@@ -120,6 +141,7 @@ export default {
             max-width: 420px;
             width: 100%;
             position: relative;
+            flex-grow: 1;
              @include media(768px) {
                 margin-bottom: 25px;
             }
@@ -138,14 +160,14 @@ export default {
             }
         }
 
-        &__form-sigin .login-form {
+        &__form-singin .login-form {
             max-width: 420px;
             width: 100%;
             @include flex( center, center, column, wrap);
             width: 100%;
             text-align: left;
         }
-        &__form-sigin .sing-form__form-forgot {
+        &__form-singin .sing-form__form-forgot {
             position: absolute;
             right: 10px;
             top: -10px;
@@ -179,8 +201,8 @@ export default {
             @include text($text-font-size, 600, $grey-dark);
         } 
 
-        &__form-sigin input,
-        &__form-sigin .sing-form__form-button {
+        &__form-singin input,
+        &__form-singin .sing-form__form-button {
             min-height: 54px;
             padding: 0 10px;
             max-width: 420px;
@@ -189,12 +211,12 @@ export default {
             @include text($text-font-size, 600, $grey-dark);
         }
 
-        &__form-sigin input[type='password'] {
+        &__form-singin input[type='password'] {
             padding-right: 60%;
             position: relative;
         }
 
-        &__form-sigin .sing-form__form-button {
+        &__form-singin .sing-form__form-button {
             @include text(16px, 400, $white);
             background-color: $blue;
             box-shadow: 0 14px 28px rgba($blue,0.25), 0 10px 10px rgba($blue,0.22);
@@ -212,18 +234,13 @@ export default {
                 background-color: #C6D0E0;
                 box-shadow: none;
             }
-
         }
-
 
         &__list-info {
             @include flex( flex-start, center, row, wrap);
-            position: absolute;
-            bottom: 70px;
+            height: 50px;
 
             @include media(768px) {
-                position: static;
-                bottom: 0px;
                 @include flex( center, center, row, wrap);
                 width: 100%;
             }
