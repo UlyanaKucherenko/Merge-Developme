@@ -10,11 +10,10 @@
                         <img  :src="require(`@/assets/img/slides/${image}.png`)" :alt="image">
                     </div>
                 </div>    
-                <div>
+                <div class="promo-sliders__description">
                     <h2 class="promo-sliders__title">{{title}}</h2>
                     <p class="promo-sliders__text" >{{text}}</p>
                 </div>
-                
             </div>
         </a-carousel>
     </div>
@@ -22,17 +21,6 @@
 <script>
 export default {
     name: "PromoSliders",
-    
-    props:{
-        title: {
-            type: String,
-            default: "default title"
-        },
-        text: {
-            type: String,
-            default: "default text"
-        },
-    },
 
     data() {
         return{
@@ -141,6 +129,13 @@ export default {
             }
         }
 
+        &__description {
+            padding: 0 40px;
+            @include media(768px) {
+                padding: 0 24px; 
+            }
+        }
+
         &__title {
             @include text($second-font-size,600,#fff);
             margin-bottom: 15px;
@@ -151,6 +146,8 @@ export default {
             @include text($text-font-size,600,#fff);
             text-align: center;
             margin-bottom: 84px;
+            max-width: 504px;
+            width: 100%;
         }
     }
 </style>
