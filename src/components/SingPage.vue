@@ -1,11 +1,11 @@
 <template>
   <div class="sing-page">
     <div class="container sing-page__container">
-      <div class="sing-page__col-left">
+      <div class="sing-page__col sing-page__col-left">
         <promo-sliders />
       </div>
 
-      <div class="sing-page__col-right">
+      <div class="sing-page__col sing-page__col-right">
          <!--Sing form -->
         <sing-form />
       </div>
@@ -39,22 +39,18 @@ export default {
             height: 100%;
         }
     }
+
+     &__col {
+        width: 50%;
+        height: 100%;
+        @include media(768px) {
+          width: 100%;
+        }
+     }
     &__col-left {
-      width: 55%;
       position: relative;
       height: 100%;
       padding: 20px;
-      @include media(768px) {
-        width: 100%;
-      }
-
-    }
-    &__col-right {
-      width: 45%;
-      height: 100%;
-      @include media(768px) {
-        width: 100%;
-      }
     }
 
 

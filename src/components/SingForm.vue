@@ -261,4 +261,7 @@ export default {
             }
         }
     }
+    .ant-form-item-with-help {
+        margin-bottom: 25px;
+    }
 </style>
